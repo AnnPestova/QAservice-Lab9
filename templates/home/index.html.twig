@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    QAservice
+{% endblock %}
+
+{% block header %}
+    {% include 'base/header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <!-- main body -->
+    <main>
+        <div class="container container-card mb-3">
+            <div class="row">
+                {% for q in questions %}
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ q.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ q.date|date('d.m.Y, в H:m') }}</h6>
+                                <p class="card-text">{{ q.category }}</p>
+                                <a href="question/{{ q.id }}" class="btn btn-primary stretched-link">Перейти к вопросу (Ответов: {{ q.answerCount }} )</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if hasPreviousPage == true %}
+                        <li class="page-item">
+                            <a href="/?page={{ currentPage - 1 }}" class="btn btn-primary me-3">Назад</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="/?page=1" class="btn btn-primary me-3">1</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="btn btn-primary me-3 disabled">Назад</a>
+                        </li>
+                    {% endif %}
+                    {% if hasNextPage == true %}
+                        <li class="page-item">
+                            <a href="/?page={{ currentPage + 1 }}" class="btn btn-primary">Далее</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="btn btn-primary disabled">Далее</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </main>
+{% endblock %}
+
+{% block footer %}
+    {% include 'base/footer.html.twig' %}
+{% endblock %}

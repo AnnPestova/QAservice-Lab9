@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    QAservice
+{% endblock %}
+
+{% block header %}
+    {% include 'base/header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <!-- main body -->
+    <main>
+        {% for q in question %}
+            <div class="container mt-5">
+                <h2 class="fw-bolder">{{ q.title ~ ' ' }}<span
+                            class="badge bg-secondary">{{ q.date|date('d.m.Y') }}</span></h2>
+                <h3 class="fw-normal"><span class="fw-bold">Категория: </span>{{ q.category }}</h3>
+                <h3 class="fw-normal"><span class="fw-bold">Автор: </span>{{ q.author }}</h3>
+                <p class="lh-lg fs-5">{{ q.text }}</p>
+
+                {% if app.user %}
+                    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+                    {{ form_start(form) }}
+                    <div class="form-floating">
+                        {{ form_row(form.answer_text, {
+                            class: 'form-control comment-textarea',
+                            label: 'Ответ',
+                        }) }}
+                        <button type="submit" class="btn btn-lg btn-outline-primary mb-3 mt-3">
+                            Отправить
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                {% endif %}
+                <div class="mb-3 mt-3">
+                    {% for a in answers %}
+                        <div class="card text-dark bg-light mb-3">
+                            <div class="card-header">{{ 'Этот ответ помог уже: ' ~ a.correctness ~ '.' }}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ a.author ~ ', (' ~ a.date|date('d.m.Y, в H:m') ~ ')' }}</h5>
+                                <p class="card-text">{{ a.text }}</p>
+                            </div>
+                            <div>
+                                <a href="/question_help/{{ a.id }}/{{ q.id }}" class="btn btn-primary me-3">Это мне помогло</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </main>
+{% endblock %}
+
+{% block footer %}
+    {% include 'base/footer.html.twig' %}
+{% endblock %}
